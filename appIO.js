@@ -1,16 +1,53 @@
-var util           = require('util'),
+var util            = require('util'),
     EventEmitter    = require('events').EventEmitter;
 
-var Server = function() {
-    console.log('init');
+var http            = require('http');
+var dns             = require('dns');
+
+var server = http.createServer();
+
+var handleReq = function(req,res){
+
+    req.setEncoding('utf8');
+
+    req.on('data', function(data){
+
+        console.log(data);
+    });
+
+    res.writeHead(200, {});
+    res.end('hello world');
 };
 
-util.inherits(Server, EventEmitter);
+server.on('request', handleReq);
+server.listen(8080);
 
-var s = new Server();
+server.on('connection', function(request){
 
-s.on('abc', function() {
-    console.log('abc');
+    console.log("on connection");
 });
 
-s.emit('abc');
+
+// var Server = function() {
+//     console.log('init');
+// };
+
+// util.inherits(Server, EventEmitter);
+
+// Server.prototype.outputThis = function(output) {
+//     console.log(this);
+//     console.log(output);
+// };
+
+
+// var s = new Server();
+
+// //s.outputThis("holas");
+
+// s.on('abc', s.outputThis);
+
+// s.emit('abc', s);
+
+
+console.log(process.memoryUsage());
+
